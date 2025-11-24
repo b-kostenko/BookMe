@@ -1,6 +1,10 @@
+from pathlib import Path
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 class DatabaseSettings(BaseSettings):
     """Database connection settings."""
@@ -12,7 +16,7 @@ class DatabaseSettings(BaseSettings):
     POSTGRES_PORT: int = Field(default=5432, alias="POSTGRES_PORT")
     POSTGRES_DB: str = Field(..., alias="POSTGRES_DB")
 
-    model_config = SettingsConfigDict(env_file="../.env", env_prefix="POSTGRES_", extra="ignore")
+    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", env_prefix="POSTGRES_", extra="ignore")
 
     @property
     def DATABASE_URL(self) -> str:
@@ -35,7 +39,7 @@ class Settings(BaseSettings):
     database: DatabaseSettings = DatabaseSettings()
 
     model_config = SettingsConfigDict(
-        env_file="../.env",
+        env_file=BASE_DIR / ".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore"
