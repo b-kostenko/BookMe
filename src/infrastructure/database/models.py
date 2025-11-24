@@ -18,6 +18,10 @@ class User(BaseModelMixin):
     phone: Mapped[str] = mapped_column(String(25))
     password_hash: Mapped[str] = mapped_column(String(500))
 
+    # Relations
+    staff_memberships: Mapped[list["Staff"]] = relationship("Staff", back_populates="user", cascade="all, delete-orphan")
+    appointments: Mapped[list["Appointment"]] = relationship("Appointment", back_populates="user")
+
     def __repr__(self):
         return f"<User(id={self.id}, email='{self.email}')>"
 
@@ -50,10 +54,12 @@ class Company(BaseModelMixin):
 
     # Relations
     staff: Mapped[list["Staff"]] = relationship(
+        "Staff",
         back_populates="company",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
+    appointments: Mapped[list["Appointment"]] = relationship("Appointment", back_populates="company")
 
     def __repr__(self):
         return f"<Company(id={self.id}, name='{self.company_name}')>"
@@ -106,6 +112,7 @@ class StaffService(BaseModelMixin):
 
     # Relations
     staff: Mapped["Staff"] = relationship("Staff", back_populates="services")
+    appointments: Mapped[list["Appointment"]] = relationship("Appointment", back_populates="service")
 
     def __repr__(self):
         return f"<StaffService(id={self.id}, name='{self.name}', price={self.price})>"
@@ -132,6 +139,7 @@ class Appointment(BaseModelMixin):
     staff: Mapped["Staff"] = relationship("Staff", back_populates="appointments")
     user: Mapped["User"] = relationship("User", back_populates="appointments")
     service: Mapped["StaffService"] = relationship("StaffService", back_populates="appointments")
+    reviews: Mapped[list["Review"]] = relationship("Review", back_populates="appointment", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Appointment(id={self.id}, start={self.appointment_start}, end={self.appointment_end}, status='{self.status}')>"

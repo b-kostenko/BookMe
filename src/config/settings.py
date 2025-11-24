@@ -6,6 +6,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+
+class TokenSettings(BaseSettings):
+    SECRET_KEY: str = Field(..., alias="SECRET_KEY")
+    ALGORITHM: str = Field(..., alias="ALGORITHM")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(..., alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = Field(..., alias="REFRESH_TOKEN_EXPIRE_MINUTES")
+    TOKEN_TYPE: str = Field(..., alias="TOKEN_TYPE")
+
+    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", env_prefix="JWT_", extra="ignore")
+
 class DatabaseSettings(BaseSettings):
     """Database connection settings."""
 

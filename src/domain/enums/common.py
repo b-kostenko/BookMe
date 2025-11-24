@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import IntEnum, StrEnum
 
 
 class WeekDay(IntEnum):
@@ -10,3 +10,9 @@ class WeekDay(IntEnum):
     FRIDAY = 4
     SATURDAY = 5
     SUNDAY = 6
+
+
+class TokenType(StrEnum):
+    """Enumeration for types of tokens."""
+    ACCESS = "access"
+    REFRESH = "refresh"
